@@ -33,3 +33,21 @@ screen -S seer
 ```
 
 2、 Create a new directory named seer in the root directory, download the `v0.0.5 version` of the package to this directory, and rename it to `seer.tar.gz`. (Please go to the SEER Software Release page at https://github.com/seer-project/seer-core-package/releases and copy the latest ubuntu version package link to replace this download link.) 
+
+ mkdir seer curl -Lo seer/seer.tar.gz https://github.com/seer-project/seer-core-package/releases/download/v0.05/seer-ubuntu-0.0.5.tar 
+
+3. Enter the seer directory and extract the package.
+
+ cd seer tar xzvf seer.tar.gz 
+ 
+4. Start the witness_node with the websocket parameter:
+
+ witness_node --rpc-endpoint=127.0.0.1:9090 partial-operations=true --track-account="\"seerdex-withdraw\"" --track-account="\"seerdex-deposit\"" max-ops-per-account=1000 
+ 
+The --rpc-endpoint parameter is the websocket RPC IP address and port number of node monitor. You need to replace it. Here, 127.0.0.1 is the local machine, and 9090 is the WS port specified for the node.
+
+For the node handling the deposit service, we do not need to save all the data, only need to save the account data related to the exchange account to save memory expenses, so we need to set the partial-operations parameter and the --track-account parameter, here Partial-operations=true means that only part of the data is needed. "\"seerdex-withdraw\"" and "\"seerdex-deposit\"" indicate one or more account ids to be tracked, which you need to replace.
+
+The --max-ops-per-account parameter sets the number of operation records for the reserved account in memory. Here, 1000 indicates that 1000 operation records of the tracking account are retained, and you need to fill in as required.
+
+5. After the observation node runs normally, ctrl+A d hides the screen and disconnects the server. After opening Sreeen with nodes, use screen -R or screen -r seer. After the node starts normally, it will display a blockout message of 3 seconds as shown below. If you want to close the node, use control + C.
